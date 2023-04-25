@@ -1,5 +1,6 @@
 package com.sprta.hanghae992.service;
 
+import com.sprta.hanghae992.dto.MsgResponseDto;
 import com.sprta.hanghae992.dto.PostRequestDto;
 import com.sprta.hanghae992.dto.PostResponseDto;
 import com.sprta.hanghae992.entity.Post;
@@ -10,6 +11,7 @@ import com.sprta.hanghae992.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -92,7 +94,7 @@ public class PostService {
     }
 
     @Transactional
-    public Message deleteMemo(Long id, HttpServletRequest httpServletRequest) {
+    public MsgResponseDto deleteMemo(Long id, HttpServletRequest httpServletRequest) {
         String token = jwtUtil.resolveToken(httpServletRequest);
         Claims claims;
 
@@ -112,10 +114,9 @@ public class PostService {
                     () -> new NullPointerException("해당 게시글은 존재하지 않습니다.")
             );
             postRepository.deleteById(id);
-            Message Sucess = new Message("게시글 삭제 성공",200);
-            return Sucess;
-        } else {Message Fail = new Message("게시글 삭제 실패",404);
-            return Fail;}
+
+            return new MsgResponseDto("게시글 삭제 성공", HttpStatus.OK);
+        } else {return new MsgResponseDto("게시글 삭제 실패", HttpStatus.BAD_REQUEST);}
     }
 
     //게시글 상세조회

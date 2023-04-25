@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
       List<Post> findAllByOrderByModifiedAtDesc();  //전체조회
-      List<Post> findAllByUserId(Long userId);
+
       Optional<Post> findByIdAndUserId(Long id, Long userId);   //수정
 
 
